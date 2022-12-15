@@ -11,10 +11,9 @@ app.config["DEBUG"] = True
 
 app.config["UPLOAD_FOLDER"] = './uploads'
 
-keys = {
-    'hr': 'hrfarmer',
-    'hr2': 'hrfarmer2'
-}
+f = open('keys.json')
+keys = json.load(f)
+
 key_list = list(keys.values())
 
 @app.errorhandler(400)
