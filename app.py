@@ -58,7 +58,7 @@ def upload_file():
 
     response = {
         "data": {
-            "link": f"http://127.0.0.1:5000{url_for('download_file', name=filename, prefix=prefix)}"
+            "link": f"http://172.31.85.185:8080{url_for('download_file', name=filename, prefix=prefix)}"
         }
     }
 
