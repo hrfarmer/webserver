@@ -70,4 +70,5 @@ def download_file(name, prefix):
     directory = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
     return send_from_directory(directory, name)
 
-app.run()
+if __name__ == "__main__":
+    app.run()
