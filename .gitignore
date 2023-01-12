@@ -1,2 +1,5 @@
 /.env
 /uploads
+/venv
+/__pycache__
+/keys.json

@@ -30,7 +30,7 @@ def file_error(error):
 
 @app.route('/', methods=['GET'])
 def home():
-    return "DIS IS A TEST YEA"
+    return "welcome to my amazing website"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -58,14 +58,14 @@ def upload_file():
 
     response = {
         "data": {
-            "link": f"http://172.31.85.185:8080{url_for('download_file', name=filename, prefix=prefix)}"
+            "link": f"http://hrfarmer.live{url_for('download_file', name=filename, prefix=prefix)}"
         }
     }
 
     r = json.dumps(response)
     return r
 
-@app.route('/uploads/<prefix>/<name>')
+@app.route('/<prefix>/<name>')
 def download_file(name, prefix):
     directory = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
     return send_from_directory(directory, name)
