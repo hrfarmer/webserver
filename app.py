@@ -31,9 +31,15 @@ key_list = list(keys.values())
 
 #For shortlink generation
 def generate_shortlink():
-    characters = string.ascii_letters + string.digits
-    final_string = ''.join(random.choice(characters) for i in range(10))
-    return final_string
+    database = Database()
+    while True:
+        characters = string.ascii_letters + string.digits
+        final_string = ''.join(random.choice(characters) for i in range(10))
+        d = database.return_path(final_string)
+        if d != None:
+            continue
+        else:
+            return final_string
 
 
 @app.route('/favicon.ico')
@@ -114,5 +120,6 @@ def open_shortlink(shortlink):
 
     split_path = os.path.split(path[0])
     return send_from_directory(split_path[0], split_path[1])
+    
 if __name__ == "__main__":
     app.run()
