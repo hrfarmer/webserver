@@ -13,8 +13,6 @@ app.config["DEBUG"] = True
 app.config["UPLOAD_FOLDER"] = './uploads'
 server_url = "http://hrfarmer.live"
 
-database = Database()
-
 try:
     _x = sys.argv[1]
     if _x == "test":
@@ -34,11 +32,14 @@ key_list = list(keys.values())
 #For shortlink generation
 def generate_shortlink():
     characters = string.ascii_letters + string.digits
-    final_string = ''.join(random.choice(characters) for i in range(6))
+    final_string = ''.join(random.choice(characters) for i in range(10))
     return final_string
 
-def add_shortlink(path, shortlink):
-    database.add_link(path, shortlink)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.errorhandler(400)
 def no_permission(error):
@@ -52,12 +53,18 @@ def no_key(error):
 def file_error(error):
     return {"erorr": "There is an issue with the file provided, please try again or try a differnt file."}, 403
 
+@app.errorhandler(404)
+def invalid_link(error):
+    return {"error": "This link is invalid"}
+
 @app.route('/', methods=['GET'])
 def home():
     return "welcome to my amazing website"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    database = Database()
+
     if 'Auth' in request.headers:
         if request.headers['Auth'] in key_list:
             prefix = list(keys.keys())[list(keys.values()).index(request.headers['Auth'])]
@@ -81,11 +88,11 @@ def upload_file():
         file.save(os.path.join(path, filename))
     
     shortlink = generate_shortlink()
-    add_shortlink(os.path.join(path, filename), shortlink)
+    database.add_link(os.path.join(path, filename), shortlink)
 
     response = {
         "data": {
-            "link": f"{server_url}{url_for('download_file', name=filename, prefix=prefix)}"
+            "link": f"{server_url}/{shortlink}"
         }
     }
 
@@ -97,5 +104,15 @@ def download_file(name, prefix):
     directory = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
     return send_from_directory(directory, name)
 
+@app.route('/<shortlink>')
+def open_shortlink(shortlink):
+    database = Database()
+
+    path = database.return_path(shortlink)
+    if path == None:
+        abort(404)
+
+    split_path = os.path.split(path[0])
+    return send_from_directory(split_path[0], split_path[1])
 if __name__ == "__main__":
     app.run()
