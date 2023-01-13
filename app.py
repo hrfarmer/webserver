@@ -1,6 +1,9 @@
 import os
 import sys
 import json
+import random
+import string
+
 from flask import Flask, request, redirect, url_for, send_from_directory, abort
 from werkzeug.utils import secure_filename
 from db import Database
@@ -14,7 +17,6 @@ database = Database()
 
 try:
     _x = sys.argv[1]
-    print(_x)
     if _x == "test":
         server_url = "http://127.0.0.1:5000"
 except IndexError:
@@ -28,6 +30,15 @@ except:
     exit()
 
 key_list = list(keys.values())
+
+#For shortlink generation
+def generate_shortlink():
+    characters = string.ascii_letters + string.digits
+    final_string = ''.join(random.choice(characters) for i in range(6))
+    return final_string
+
+def add_shortlink(path, shortlink):
+    database.add_link(path, shortlink)
 
 @app.errorhandler(400)
 def no_permission(error):
@@ -68,6 +79,9 @@ def upload_file():
         os.mkdir(os.path.join(app.config["UPLOAD_FOLDER"], prefix))
         path = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
         file.save(os.path.join(path, filename))
+    
+    shortlink = generate_shortlink()
+    add_shortlink(os.path.join(path, filename), shortlink)
 
     response = {
         "data": {

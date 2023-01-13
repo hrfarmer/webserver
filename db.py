@@ -15,7 +15,7 @@ class Database:
         print("done")
     
     def add_link(self, path, shortlink):
-        self.cursor.execute(f"INSERT INTO image_links (file_path, shortlink) VALUES('{file_path}', '{shortlink}')")
+        self.cursor.execute(f"INSERT INTO image_links (file_path, shortlink) VALUES('{path}', '{shortlink}')")
         self.conn.commit()
         
 d = Database()
