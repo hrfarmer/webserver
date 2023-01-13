@@ -1,18 +1,31 @@
 import os
+import sys
 import json
 from flask import Flask, request, redirect, url_for, send_from_directory, abort
 from werkzeug.utils import secure_filename
-from dotenv import load_dotenv
-
-load_dotenv()
+from db import Database
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-
 app.config["UPLOAD_FOLDER"] = './uploads'
+server_url = "http://hrfarmer.live"
 
-f = open('keys.json')
-keys = json.load(f)
+database = Database()
+
+try:
+    _x = sys.argv[1]
+    print(_x)
+    if _x == "test":
+        server_url = "http://127.0.0.1:5000"
+except IndexError:
+    pass
+    
+try:
+    f = open('keys.json')
+    keys = json.load(f)
+except:
+    print("json file broke")
+    exit()
 
 key_list = list(keys.values())
 
@@ -58,7 +71,7 @@ def upload_file():
 
     response = {
         "data": {
-            "link": f"http://hrfarmer.live{url_for('download_file', name=filename, prefix=prefix)}"
+            "link": f"{server_url}{url_for('download_file', name=filename, prefix=prefix)}"
         }
     }
 
