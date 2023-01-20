@@ -98,7 +98,7 @@ def upload_file():
 
     response = {
         "data": {
-            "link": f"{server_url}/{shortlink}"
+            "link": f"{server_url}/a/{shortlink}"
         }
     }
 
@@ -110,7 +110,7 @@ def download_file(name, prefix):
     directory = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
     return send_from_directory(directory, name)
 
-@app.route('/<shortlink>')
+@app.route('/a/<shortlink>')
 def open_shortlink(shortlink):
     database = Database()
 
