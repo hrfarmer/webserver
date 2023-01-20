@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+p {
+    font-family: 'Inter', sans-serif;
+}
+h1 {
+    font-family: 'Inter', sans-serif;
+}
+table {
+    width: 100%;
+}
+
+.header {
+    background: #1abc9c;
+    color: white;
+    font-size: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    
+}
+.title {
+    width: 35%;
+}
+.empty {
+    width: 30%;
+}
+.tableitem {
+    width: 10%;
+}
+.tableimage {
+    width: 75px;
+    height: 75px;
+}
+
