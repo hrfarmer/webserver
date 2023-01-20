@@ -4,7 +4,7 @@ import json
 import random
 import string
 
-from flask import Flask, request, redirect, url_for, send_from_directory, abort
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory, abort
 from werkzeug.utils import secure_filename
 from db import Database
 
@@ -65,7 +65,7 @@ def invalid_link(error):
 
 @app.route('/', methods=['GET'])
 def home():
-    return "welcome to my amazing website"
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
