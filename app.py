@@ -58,7 +58,7 @@ def favicon():
 
 @app.errorhandler(400)
 def no_permission(error):
-    return {"error": "The key provided is invalid"}, 400
+    return {"error": "No permission!!!! (maybe key invalid or something broke)"}, 400
 
 
 @app.errorhandler(401)
@@ -148,6 +148,7 @@ def open_file(shortlink):
 
 @app.route('/auth')
 def twitch_auth():
+    print(request.url)
     if request.url == f"{server_url}/auth":
         return redirect(
             f"https://id.twitch.tv/oauth2/authorize?response_type=code&client_id={client_id}&redirect_uri={server_url}/auth&scope=user%3Aread%3Afollows+user%3Aread%3Aemail")
@@ -175,9 +176,12 @@ def twitch_auth():
     email = r_json['data'][0]['email']
     db.new_user(username, email, access_token, refresh_token, 'user')
 
-    return render_template('loggedin.html', username=username)
+    return redirect(url_for('file_page', key=access_token))
 
 
+@app.route('/files')
+def file_page():
+    return render_template('files.html')
 
 
 if __name__ == "__main__":
