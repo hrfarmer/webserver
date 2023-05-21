@@ -21,19 +21,24 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
 try:
+    print(sys.argv)
     _x = sys.argv[1]
     if _x == "test":
+        print("Testing mode on")
         server_url = "http://localhost:5000"
 except IndexError:
     pass
 
-try:
-    f = open('keys.json')
-    keys = json.load(f)
-except:
-    print("json file broke")
-    exit()
+json_exists = os.path.exists("keys.json")
+if json_exists == False:
+    default_key = {"default": "key"}
+    key_dict = json.dumps(default_key)
 
+    with open("keys.json", "w") as f:
+        f.write(key_dict)
+
+f = open('keys.json')
+keys = json.load(f)
 key_list = list(keys.values())
 
 
@@ -122,16 +127,24 @@ def upload_file():
 
 @app.route('/a/<shortlink>')
 def open_album(shortlink):
+    # database = Database()
+
+    # path = database.return_path(shortlink)
+    # if path is None:
+    #     abort(404)
+
+    # filepath = f"{server_url}/upload/{shortlink}"
+
+    # data = {'link': filepath, 'shortlink': shortlink, 'server_path': path[1]}
+    # return render_template('filepage.html', data=data)
     database = Database()
 
     path = database.return_path(shortlink)
-    if path is None:
+    if path == None:
         abort(404)
 
-    filepath = f"{server_url}/upload/{shortlink}"
-
-    data = {'link': filepath, 'shortlink': shortlink, 'server_path': path[1]}
-    return render_template('filepage.html', data=data)
+    split_path = os.path.split(path[0])
+    return send_from_directory(split_path[0], split_path[1])
 
 
 @app.route('/upload/<shortlink>')
