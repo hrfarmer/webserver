@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>{{ data.shortlink }}</title>
+
+    <script type="text/javascript" src="/static/js/app.js"></script>
+    <script type="text/javascript">
+        var imageData = returnData({{data|tojson}})
+        console.log(imageData.filepath)
+    </script>
+</head>
+<body>
+    <div class="header">
+        <table>
+            <tr>
+                <th class="title">
+                    <h1 class="titletext">HR FARMER</h1>
+                </th>
+                <th class="empty"></th>
+                <th class="tableitem"><img class="tableimage" src="/static/images/discord.png" alt="discord"></th>
+                <th class="tableitem"><a href="https://osu.ppy.sh/users/13473514"><img class="tableimage"
+                            src="/static/images/osu.png" alt="osu!"></a></th>
+                <th class="tableitem"><img class="tableimage" src="/static/images/upload.png" alt="upload"></th>
+            </tr>
+        </table>
+    </div>
+    <div id="file-embed">
+
+    </div>
+    
+</body>
+</html>

@@ -4,3 +4,4 @@
 /__pycache__
 /keys.json
 /database.db
+.DS_Store
