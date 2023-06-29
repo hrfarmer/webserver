@@ -102,7 +102,8 @@ def upload_file():
     if file.filename == '':
         abort(403)
 
-    filename = secure_filename(file.filename)
+    shortlink = generate_shortlink()
+    filename = shortlink + "." + file.filename.split(".")[1]
 
     if os.path.exists(os.path.join(app.config["UPLOAD_FOLDER"], prefix)):
         path = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
@@ -112,7 +113,6 @@ def upload_file():
         path = os.path.join(app.config["UPLOAD_FOLDER"], prefix)
         file.save(os.path.join(path, filename))
 
-    shortlink = generate_shortlink()
     database.add_link(os.path.join(path, filename), shortlink)
 
     response = {
